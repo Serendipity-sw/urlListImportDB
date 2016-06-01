@@ -56,6 +56,7 @@ func readFile(filepath string,isWrite bool) {
 		err error
 		write *os.File
 		wrap []byte=[]byte("\n")
+		sqlStr []byte
 	)
 	if runtime.GOOS == "windows" {
 		wrap=[]byte("\r\n")
@@ -86,15 +87,19 @@ func readFile(filepath string,isWrite bool) {
 			if len(strings.TrimSpace(string(line)))==0 {
 				continue
 			}
-			line=append(line,[]byte(",随机网址")...)
+			sqlStr=append(sqlStr,[]byte("INSERT INTO `dspadmin`.`url`(`Url`,`UrlGroupId`,`Name`,`IsDelete`)VALUES('")...)
+			sqlStr=append(sqlStr,line...)
+			sqlStr=append(sqlStr,[]byte("',1,'',0);")...)
+			//line=append(line,[]byte(",随机网址")...)
 			if err != io.EOF {
-				line=append(line,wrap...)
+				sqlStr=append(sqlStr,wrap...)
 			}
 			//写文件
 			if isWrite {
-				write.Write(line)
+				write.Write(sqlStr)
 			}
 			line=line[:0]
+			sqlStr=sqlStr[:0]
 		}
 	}
 }

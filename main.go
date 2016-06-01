@@ -57,7 +57,7 @@ func serverRun(cfn string, debug bool) {
 	glog.Info("run routines successfully.\n")
 
 	readFile("./urlList.txt",true)
-	go loadFileDB("./afterProcess.txt")
+	//loadFileDB("./afterProcess.txt")
 }
 
 // 结束进程
